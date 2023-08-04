@@ -12,7 +12,7 @@ export default function App() {
                 // formData.append('message', 'Are you getting it?');
                 // console.log('blob :', wavBlob);
                 console.log("date-time at start: ", Date.now().toString());
-                const response = await fetch('http://localhost:3001/transcribe', {
+                const response = await fetch('http://localhost:3001/getresponse', {
                     method: 'POST',
                     body: formData,
                 });
