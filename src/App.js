@@ -1,9 +1,11 @@
-import React from 'react';
-import { AudioRecorder } from 'react-audio-voice-recorder';
+import React, { useEffect, useRef } from 'react';
+import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 
 export default function App() {
+    const recorderControls = useAudioRecorder();
+    const startButtonRef = useRef(null);
+    const stopButtonRef = useRef(null);
     const addAudioElement = async (blob) => {
-
         try {
             let wavBlob = blob;
             if (wavBlob) {
@@ -16,9 +18,6 @@ export default function App() {
                     method: 'POST',
                     body: formData,
                 });
-                // const data = await response.json();
-                // console.log('Transcription Job Name:', data);
-                // Handle the response or do something with the jobName
                 const audioBlob = await response.blob();
                 const audioUrl = URL.createObjectURL(audioBlob);
                 console.log("date-time at end: ", Date.now().toString());
@@ -29,10 +28,28 @@ export default function App() {
             }
             // Handle the response or do something with the jobName
         } catch (error) {
-            console.error('Error starting transcription:', error);
+            console.error('Error getting response from server:', error);
+        }
+    };
+    let isRecording = false;
+    const handleKeyPress = (event) => {
+        if (event.key === ' ') {
+            if (!isRecording) {
+                startButtonRef.current.click();
+                isRecording = true;
+            } else {
+                stopButtonRef.current.click();
+                isRecording = false;
+            }
         }
     };
 
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
 
     return (
         <div>
@@ -50,13 +67,19 @@ export default function App() {
                 }}
                 onNotAllowedOrFound={(err) => console.table(err)}
                 // downloadOnSavePress={true}
-                downloadFileExtension="wav"
+                // downloadFileExtension="wav"
                 mediaRecorderOptions={{
                     audioBitsPerSecond: 128000,
                 }}
                 showVisualizer={true}
+                recorderControls={recorderControls}
             />
             <br />
+            {recorderControls.isRecording ?
+                <button id='stopButton' ref={stopButtonRef} onClick={recorderControls.stopRecording}>Stop</button> :
+                <button id='startButton' ref={startButtonRef}  onClick={recorderControls.startRecording}>Start</button>
+            }
+
         </div>
     );
 }
