@@ -12,6 +12,39 @@ code {
     monospace;
 }
 
-.audio-recorder{
+.audio-recorder {
   visibility: hidden;
+}
+
+.mainSection {
+  height: 100vh;
+  position: relative;
+}
+
+.centerThem {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* position: absolute; */
+}
+
+.centerText {
+  /* position: absolute; */
+  left: 50%;
+  bottom: 50%;
+  font-size: 30px;
+}
+
+.centerButton {
+  /* position: absolute; */
+  left: 50%;
+  bottom: 50%;
+  font-size: 30px;
+}
+
+.centerThem button {
+  width: 100px;
+  height: 50px;
+  border-radius: 30px;
+  font-size: 20px;
 }
